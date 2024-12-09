@@ -16,6 +16,7 @@ class MyAppWindow : public WithMainAppWindow<TopWindow>
 		AutoScroller scroller;
 		WithDrinks<ParentCtrl> scroller_view;
 		Option flavor[NUM_FLAV];
+		drink d;
 };
 
 MyAppWindow::MyAppWindow()
@@ -47,6 +48,11 @@ MyAppWindow::MyAppWindow()
 		}
 	}
 	
+	scroller_view.base << [&, this]
+	{
+		baseType b = static_cast<baseType>((int)scroller_view.base);
+		d.setBase(b);
+	};
 	
 }
 
