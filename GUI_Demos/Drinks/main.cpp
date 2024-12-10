@@ -17,7 +17,8 @@ class MyAppWindow : public WithMainAppWindow<TopWindow>
 		MyAppWindow();
 		//~MyAppWindow();
 		void checkPrice();
-		//void Paint(Draw&);
+	//	void Paint(Draw&);
+		void SaveOrder();
 		
 	private:
 		AutoScroller scroller;
@@ -26,6 +27,7 @@ class MyAppWindow : public WithMainAppWindow<TopWindow>
 		drink d;
 		std::vector<drink> order;
 		OptionTree optree;
+		Button writeBtn;
 };
 
 MyAppWindow::MyAppWindow()
@@ -36,6 +38,10 @@ MyAppWindow::MyAppWindow()
 	Add(scroller.SizePos());
 	CtrlLayout(scroller_view);
 	scroller.AddPane(scroller_view);
+	
+	writeBtn.SetLabel("Complete Order");
+	
+	
 	scroller_view.base = -1;
 	scroller_view.temp = -1;
 	scroller_view.size = -1;
@@ -73,10 +79,15 @@ MyAppWindow::MyAppWindow()
 		};
 	}
 	scroller_view.flavorOptions.Add(optree.SizePos());
-	//optree. << [&, this]
-	//{
-			
-	//};
+	optree.WhenOption = [&, this]
+	{
+		if(optree.Get(0) == 1)
+			for(int i = 0; i < NUM_FLAV; i++)
+				d.addFlavor(flavs[i]);
+		else if(optree.Get(0) == 0)
+			d.removeAllFlavor();
+		checkPrice();
+	};
 	
 	scroller_view.base << [&, this]
 	{
@@ -104,14 +115,61 @@ MyAppWindow::MyAppWindow()
 		checkPrice();
 	};
 	
+	scroller_view.orderBtn << [&, this]
+	{
+		if((int)scroller_view.temp == -1 || (int)scroller_view.size == -1 || (int)scroller_view.base == -1)
+		{
+			ErrorOK("Please choose the base, size, and temperature");
+			return;
+		}
+		order.push_back(d);
+		std::ostringstream drinkStr;
+		drinkStr << d << std::endl;
+		scroller_view.drinkList.Append(drinkStr.str());
+		scroller_view.base = -1;
+		scroller_view.size = -1;
+		scroller_view.temp = -1;
+		d.setBase(CREAM);
+		d.setTemperature(HOT);
+		d.setSize(SMALL);
+		scroller_view.dairy.GoBegin();
+		d.setDairy("None");
+		d.removeAllFlavor();
+		/*for(int i = 0; i < NUM_FLAV; i++)
+		{
+			flavor[i] = 0;
+		}*/
+		optree.Set(0,0);
+		scroller_view.price.SetData("");
+		scroller_view.writeBtnHolder.Add(writeBtn.HSizePosZ().VSizePosZ());
+		
+		
 	
+		
+	};
+	writeBtn << [&, this] {SaveOrder();};
+	
+	/*FileSel      fs; 
+	
+	fs.Type("Image file(s)", "*.jpg *.gif *.png *.bmp");
+	fs.ExecuteOpen();
+	Image m = StreamRaster::LoadFileAny(~fs.Get());
+	//Size rsz = scroller_view.snowball.GetSize();
+//	Size isz = m.GetSize();
+//	if(isz.cx >= rsz.cx || isz.cy >= rsz.cy) {
+//		if(isz.cx * rsz.cx < rsz.cy * isz.cy)
+//			rsz.cx = isz.cx * rsz.cy / isz.cy;
+//		else
+//			rsz.cy = isz.cy * rsz.cx / isz.cx;
+//		m = Rescale(m, rsz);
+//		scroller_view.snowball.SetImage(Rescale(m,rsz));
+//	}
+
+	scroller_view.snowball.SetImage(m);*/
 	
 }
 
-//void MyAppWindow::Paint(Draw& w)
-//{
-	//w.DrawRect(GetSize(), Color(165,156,149));
-//}
+
 
 void MyAppWindow::checkPrice()
 {
@@ -124,9 +182,31 @@ void MyAppWindow::checkPrice()
 	}
 }
 
+void MyAppWindow::SaveOrder()
+{
+	FileSel fs;
+	fs.ExecuteOpen();
+	String sample = fs.Get();
+	std::ofstream out(fs.Get().ToStd());
+	out << std::setprecision(2) << std::fixed << std::showpoint;
+	double total = 0;
+	for(int i = 0; i < order.size(); i++)
+	{
+		out<< order[i] << std::endl;
+		total += order[i].getPrice();
+	}
+	out << "Total: $" << total;
+	out.close();
+	Close();
+}
+
 
 GUI_APP_MAIN
 {
+	
 	MyAppWindow w;
+	
+	//ColorPopUp colorPop;
+	//colorPop.PopUp(&w);
 	w.Run();
 }

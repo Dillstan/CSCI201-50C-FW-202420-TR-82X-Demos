@@ -15,7 +15,8 @@ LAYOUT(Drinks, 720, 400)
 	ITEM(Upp::Label, priceLbl, SetLabel(t_("Price:")).LeftPosZ(12, 104).TopPosZ(348, 20))
 	ITEM(Upp::EditString, price, SetEditable(false).SetFrame(Upp::FieldFrame()).WantFocus(false).LeftPosZ(148, 200).TopPosZ(348, 20))
 	ITEM(Upp::Button, orderBtn, SetLabel(t_("Add Drink")).LeftPosZ(12, 336).TopPosZ(376, 20))
-	ITEM(Upp::DocEdit, drinkList, WantFocus(false).SetFrame(Upp::FieldFrame()).SetEditable(false).RightPosZ(12, 332).VSizePosZ(12, 32))
+	ITEM(Upp::DocEdit, drinkList, WantFocus(false).SetFrame(Upp::FieldFrame()).SetEditable(false).RightPosZ(12, 332).VSizePosZ(228, 32))
+	ITEM(Upp::ImageCtrl, snowball, LeftPosZ(436, 148).TopPosZ(12, 204))
 	ITEM(Upp::ParentCtrl, writeBtnHolder, RightPosZ(12, 332).BottomPosZ(4, 20))
 END_LAYOUT
 

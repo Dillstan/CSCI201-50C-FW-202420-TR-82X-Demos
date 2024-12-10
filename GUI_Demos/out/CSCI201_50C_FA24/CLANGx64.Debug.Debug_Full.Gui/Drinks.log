@@ -1,0 +1,7 @@
+* C:\Users\avenable\Documents\GitHub\CSCI201-50C-FW-202420-TR-82X-Demos\GUI_Demos\out\CSCI201_50C_FA24\CLANGx64.Debug.Debug_Full.Gui\Drinks.exe 09.12.2024 21:34:58, user: avenable
+
+****************** ASSERT FAILED: Assertion failed in C:\Users\avenable\Downloads\upp\uppsrc\CtrlCore\Win32Proc.cpp, line 239
+WM_PAINT invoked for N3Upp10ColorPopUp5PopupE  : 0x17170769d00 (hwnd 0xd0c94) while in Paint routine
+
+
+LastErrorMessage: The operation completed successfully. (0)
